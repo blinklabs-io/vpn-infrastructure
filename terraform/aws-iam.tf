@@ -1,5 +1,5 @@
 module "aws_iam" {
-  source = "./modules/aws_iam"
+  source = "git::https://github.com/blinklabs-io/terraform-modules.git//aws_iam"
 
   users    = try(local.env_vars.aws.iam.users, [])
   policies = try(local.env_vars.aws.iam.policies, [])

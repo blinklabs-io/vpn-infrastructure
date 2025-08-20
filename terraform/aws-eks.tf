@@ -1,5 +1,5 @@
 module "eks" {
-  source = "./modules/aws_eks"
+  source = "git::https://github.com/blinklabs-io/terraform-modules.git//aws_eks"
 
   for_each        = { for c in try(local.env_vars.aws.clusters, {}) : c.name => c }
   cluster_name    = each.value.name
