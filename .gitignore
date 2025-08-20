@@ -1,0 +1,3 @@
+# Terraform provider dir and state backups
+terraform/.terraform
+terraform/terraform.tfstate.*
