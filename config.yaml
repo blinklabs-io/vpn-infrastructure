@@ -1,0 +1,51 @@
+aws:
+  clusters:
+  - name: vpn-us-east-1
+    node_groups:
+    - name: vpn-1a
+      desired_size: 1
+  acm:
+    certificates:
+    - name: api.b7s.services
+      route53_domain: b7s.services
+  iam:
+    users:
+      - name: client-profile-bucket-user
+        policy_arns:
+          # This corresponds to policy below
+          - arn:aws:iam::705913449309:policy/client-profile-bucket-access
+        access_keys:
+          # Used in GHA workflows for blinklabs-io/vpn-ca
+          - id: AKIA2IW5YNNO72E5B62Y
+          # Used by vpn-indexer
+          - id: AKIA2IW5YNNOZU4UQ2JI
+    policies:
+      - name: client-profile-bucket-access
+        statements:
+          - actions:
+              - s3:ListBucket
+              - s3:GetObject
+              - s3:PutObject
+            resource:
+              - "arn:aws:s3:::b7s-service-client-profiles/*"
+              - "arn:aws:s3:::b7s-service-client-profiles"
+  s3:
+    buckets:
+      - name: b7s-services-client-profiles
+        acl: private
+        policy:
+          statements:
+            - actions:
+                - s3:ListBucket
+                - s3:GetObject
+                - s3:PutObject
+              principals:
+                - type: AWS
+                  identifiers:
+                    - arn:aws:iam::705913449309:user/client-profile-bucket-user
+        cors_rules:
+          - allowed_headers: ["*"]
+            allowed_methods: ["GET"]
+            allowed_origins: ["*"]
+            expose_headers:  ["ETag"]
+            max_age_seconds: 3000
