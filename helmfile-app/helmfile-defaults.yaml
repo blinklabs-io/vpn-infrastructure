@@ -1,0 +1,35 @@
+helmDefaults:
+  wait: false
+  createNamespace: true
+  # Don't automatically roll back failed releases
+  # This is needed to allow us to disable waiting. This is the default, but we're setting it
+  # here to be clear about our intentions
+  atomic: false
+
+# Load default and per-env vars files
+environments:
+  default:
+    values:
+      - vars/defaults.yaml
+      - vars/defaults.yaml.gotmpl
+    missingFileHandler: Debug
+  local-vpn:
+    values:
+      - vars/defaults.yaml
+      - vars/defaults.yaml.gotmpl
+      - vars/defaults-vpn.yaml
+      - vars/defaults-vpn.yaml.gotmpl
+      # This is the per-environment values file
+      - vars/{{ .Environment.Name }}.yaml
+      - vars/{{ .Environment.Name }}.yaml.gotmpl
+    missingFileHandler: Debug
+  aws-vpn:
+    values:
+      - vars/defaults.yaml
+      - vars/defaults.yaml.gotmpl
+      - vars/defaults-vpn.yaml
+      - vars/defaults-vpn.yaml.gotmpl
+      # This is the per-environment values file
+      - vars/{{ .Environment.Name }}.yaml
+      - vars/{{ .Environment.Name }}.yaml.gotmpl
+    missingFileHandler: Debug

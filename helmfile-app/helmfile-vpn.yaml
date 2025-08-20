@@ -1,0 +1,79 @@
+---
+bases:
+  - helmfile-defaults.yaml
+  - helmfile-repos.yaml
+
+---
+releases:
+  - name: eks
+    namespace: kube-system
+    chart: eks/aws-load-balancer-controller
+    version: 1.13.0
+    labels:
+      app: eks-lb
+    condition: eks_lb.enabled
+    hooks:
+    - events: ["presync"]
+      showlogs: true
+      command: kubectl
+      args:
+        [
+          "apply",
+          "-f",
+          "https://raw.githubusercontent.com/aws/eks-charts/master/stable/aws-load-balancer-controller/crds/crds.yaml"
+        ]
+    values:
+      - eks-lb/values.yaml.gotmpl
+
+  - name: grafana-alloy
+    namespace: alloy
+    chart: grafana/alloy
+    version: 1.1.0
+    labels:
+      app: grafana-alloy
+    condition: grafana.enabled
+    values:
+      - grafana-alloy/values.yaml.gotmpl
+
+  - name: kube-state-metrics
+    namespace: kube-system
+    chart: prometheus-community/kube-state-metrics
+    version: 6.1.0
+    labels:
+      app: kube-state-metrics
+    condition: kube-state-metrics.enabled
+    values:
+      - kube-state-metrics/values.yaml
+
+  - name: storageclasses
+    namespace: kube-system
+    chart: oci://ghcr.io/blinklabs-io/helm-charts/charts/storageclasses
+    version: 0.1.1
+    labels:
+      app: storageclasses
+    values:
+      - storageclasses: {{ toYaml .Values.storageclasses | nindent 10 }}
+
+  {{- range $key, $values := .Values.vpn.instances }}
+  - name: vpn-indexer
+    namespace: vpn-{{ $key }}
+    chart: oci://ghcr.io/blinklabs-io/helm-charts/charts/vpn-indexer
+    version: 0.3.1
+    labels:
+      app: vpn-{{ $key }}
+    condition: vpn.enabled
+    values:
+      - vpn/values.indexer.yaml
+      - {{- tpl (readFile "vpn/templates/vpn-indexer.yaml.gotmpl") (merge $values $.Values.vpn.defaults (dict "key" $key)) | nindent 8 }}
+
+  - name: vpn-{{ $key }}
+    namespace: vpn-{{ $key }}
+    chart: oci://ghcr.io/blinklabs-io/helm-charts/charts/openvpn
+    version: 0.7.0
+    labels:
+      app: vpn-{{ $key }}
+    condition: vpn.enabled
+    values:
+      - vpn/values.instance.yaml
+      - {{- tpl (readFile "vpn/templates/vpn-instance.yaml.gotmpl") (merge $values $.Values.vpn.defaults (dict "key" $key)) | nindent 8 }}
+  {{- end }}
