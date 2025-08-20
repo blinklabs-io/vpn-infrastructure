@@ -1,0 +1,8 @@
+# This file defines repos for helmcharts not hosted in OCI
+repositories:
+  - name: eks
+    url: https://aws.github.io/eks-charts
+  - name: grafana
+    url: https://grafana.github.io/helm-charts
+  - name: prometheus-community
+    url: https://prometheus-community.github.io/helm-charts

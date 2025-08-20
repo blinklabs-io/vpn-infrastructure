@@ -1,0 +1,14 @@
+---
+bases:
+  - helmfile-defaults.yaml
+  - helmfile-repos.yaml
+
+# We need to use a separate YAML document here to allow use of the per-env
+# values defined in helmfile-defaults.yaml above
+---
+helmfiles:
+  - helmfile-{{ .Values.cluster_type }}.yaml
+
+# Helm releases common to all clusters
+# This may never have anything in it
+releases: []
