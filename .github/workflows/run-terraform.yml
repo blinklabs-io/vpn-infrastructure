@@ -13,6 +13,9 @@ defaults:
     shell: bash
     working-directory: ./terraform
 
+permissions:
+  contents: read
+
 jobs:
   terraform:
     name: terraform
