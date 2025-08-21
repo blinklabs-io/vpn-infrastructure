@@ -1,0 +1,46 @@
+name: run-terraform
+
+on:
+  workflow_dispatch:
+    inputs:
+      arguments:
+        description: 'Terraform CLI arguments'
+        required: true
+        default: 'apply -auto-approve'
+
+defaults:
+  run:
+    shell: bash
+    working-directory: ./terraform
+
+permissions:
+  contents: read
+
+jobs:
+  terraform:
+    name: terraform
+    runs-on: ["ubuntu-latest"]
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2 https://github.com/actions/checkout/releases/tag/v4.2.2
+      - uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3.1.2 https://github.com/hashicorp/setup-terraform/releases/tag/v3.1.2
+        with:
+          terraform_version: "1.11.4"
+          terraform_wrapper: false
+      - name: Set up AWS & Cloudflare R2 credentials
+        run: |
+          mkdir -p ~/.aws
+          cat > ~/.aws/credentials <<EOF
+          [backend_cloudflare]
+          aws_access_key_id     = ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key = ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+          [vpn_aws]
+          aws_access_key_id     = ${{ secrets.VPN_OPS_AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key = ${{ secrets.VPN_OPS_AWS_SECRET_ACCESS_KEY }}
+          EOF
+      - run: terraform init -input=false
+        env:
+          TF_IN_AUTOMATION: true
+      - run: terraform ${{ inputs.arguments }} -input=false
+        env:
+          TF_IN_AUTOMATION: true
