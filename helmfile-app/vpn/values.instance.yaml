@@ -1,0 +1,12 @@
+---
+# Defaults for all VPN instances
+metrics:
+  enabled: true
+  securityContext:
+    # This maps to the 'nobody' user in our openvpn image
+    runAsUser: 65534
+  service:
+    enabled: true
+
+image:
+  tag: '0.4.0'

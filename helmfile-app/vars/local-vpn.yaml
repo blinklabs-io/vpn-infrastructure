@@ -1,0 +1,9 @@
+eks_lb:
+  enabled: false
+grafana:
+  enabled: false
+vpn:
+  instances:
+    local-test:
+      serviceType: NodePort
+      nodePort: 31194
