@@ -1,0 +1,57 @@
+# NOTE: we have this file hiding under templates/ because it's not meant to be consumed by helmfile directly.
+# It instead gets called from helmfile-vpn.yaml via a `tpl (readFile ...)`
+service:
+  port: {{ .port }}
+  {{- if hasKey . "serviceType" }}
+  type: {{ .serviceType }}
+  {{- end }}
+  {{- if hasKey . "nodePort" }}
+  nodePort: {{ .nodePort }}
+  {{- end }}
+  {{- if hasKey . "serviceAnnotations" }}
+  annotations: {{ toYaml .serviceAnnotations | nindent 4 }}
+  {{- end }}
+  {{- if hasKey . "loadBalancerClass" }}
+  loadBalancerClass: {{ .loadBalancerClass }}
+  {{- end }}
+
+startupScript: {{ toYaml .startupScript | nindent 2 }}
+
+configFiles:
+  - name: openvpn.conf
+    content: |
+      port {{ .port }}
+      proto {{ .proto }}
+      dev tun
+      server {{ .network }} {{ .mask }}
+      dh dh.pem
+      ca ca.crt
+      cert server.crt
+      key server.key
+      crl-verify crl.pem
+      topology subnet
+      # This path matches the default from the helm chart
+      status /var/tmp/openvpn/openvpn-status.log
+      status-version 2
+      push "redirect-gateway def1"
+      user nobody
+      group nogroup
+
+  - name: ca.crt
+    content: |-
+      {{- .caCert | nindent 6 }}
+      {{- .caBundle | nindent 6 }}
+
+  - name: server.crt
+    content: {{ toYaml .serverCert | indent 6 }}
+
+  - name: server.key
+    secret: true
+    content: {{ toYaml .serverKey | indent 6 }}
+
+  - name: dh.pem
+    content: {{ toYaml .dhParams | indent 6 }}
+
+  - name: crl.pem
+    configMapName: vpn-ca-crl
+    configMapKey: crl.pem
