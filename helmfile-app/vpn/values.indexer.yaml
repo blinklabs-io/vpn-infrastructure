@@ -1,6 +1,4 @@
 ---
-image:
-  tag: 0.3.1
 s3:
   clientBucket: b7s-services-client-profiles
 extraEnv:
