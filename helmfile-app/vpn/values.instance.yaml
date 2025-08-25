@@ -9,4 +9,4 @@ metrics:
     enabled: true
 
 image:
-  tag: '0.4.0'
+  tag: '0.4.1'
