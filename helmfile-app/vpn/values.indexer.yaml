@@ -3,6 +3,7 @@ s3:
   clientBucket: b7s-services-client-profiles
 extraEnv:
   AWS_REGION: us-east-1
+  VPN_REGION: us1
 crl:
   configMapName: vpn-ca-crl
   configMapKey: crl.pem
