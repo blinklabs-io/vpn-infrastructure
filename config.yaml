@@ -1,6 +1,9 @@
 aws:
   clusters:
   - name: vpn-us-east-1
+    # We have only a single node and want only a single AZ for EBS volume affinity
+    azs: ["us-east-1d"]
+    public_subnets: ["10.10.32.0/20"]
     node_groups:
     - name: vpn-1a
       desired_size: 1
