@@ -4,6 +4,10 @@ aws:
     node_groups:
     - name: vpn-1a
       desired_size: 1
+      metadata_options:
+        # This is needed to allow EC2 metadata calls to work in a containerized environment.
+        # This was previously the default of the upstream EKS module
+        http_put_response_hop_limit: 2
   acm:
     certificates:
     - name: api.b7s.services
