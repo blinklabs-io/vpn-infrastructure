@@ -33,6 +33,14 @@ aws:
             resource:
               - "arn:aws:s3:::b7s-service-client-profiles/*"
               - "arn:aws:s3:::b7s-service-client-profiles"
+  kms:
+    keys:
+      - name: sops
+        description: CMK used to encrypt/decrypt secrets
+        admins:
+          - arn:aws:iam::705913449309:user/ops
+        aliases:
+          - sops
   s3:
     buckets:
       - name: b7s-services-client-profiles
