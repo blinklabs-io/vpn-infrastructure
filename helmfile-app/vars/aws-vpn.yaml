@@ -1,0 +1,8 @@
+grafana:
+  enabled: true
+kube-state-metrics:
+  enabled: true
+vpn:
+  instances:
+    # The defaults should work for us
+    us1:
