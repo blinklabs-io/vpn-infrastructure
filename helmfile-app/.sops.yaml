@@ -1,0 +1,6 @@
+creation_rules:
+  - kms: arn:aws:kms:us-east-1:705913449309:key/d0644d1b-ee39-416c-ad43-ff50f6d7c8de
+sops:
+  kms:
+    - arn: arn:aws:kms:us-east-1:705913449309:key/d0644d1b-ee39-416c-ad43-ff50f6d7c8de
+      aws_profile: vpn_aws

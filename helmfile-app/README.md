@@ -9,7 +9,8 @@ It supports multiple environment per cluster type.
 
 - [Helm](https://helm.sh/docs/intro/install/) installed
 - [Helmfile](https://github.com/helmfile/helmfile) installed
-- helmfile diff plugin `helm plugin install https://github.com/databus23/helm-diff`
+- helm diff plugin `helm plugin install https://github.com/databus23/helm-diff`
+- helm secrets plugin `helm plugin install https://github.com/jkroepke/helm-secrets`
 - [kubectl](https://kubernetes.io/docs/tasks/tools/) installed
 
 ## Manual usage
