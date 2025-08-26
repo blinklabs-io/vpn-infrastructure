@@ -1,0 +1,67 @@
+# This file contains the default values for the vpn cluster type
+cluster_type: "vpn"
+
+eks_lb:
+  enabled: true
+  clusterName: vpn-us-east-1
+  serviceAccount:
+    roleArn: "arn:aws:iam::705913449309:role/vpn-us-east-1-aws-lb-controller-20250821145900281600000003"
+
+storageclasses:
+  ebs-gp3:
+    allowVolumeExpansion: true
+    provisioner: ebs.csi.aws.com
+    reclaimPolicy: Retain
+    volumeBindingMode: WaitForFirstConsumer
+    parameters:
+      type: gp3
+      fsType: ext4
+
+vpn:
+  enabled: true
+  instances: []
+  defaults:
+    port: 443
+    proto: tcp
+    network: 10.8.0.0
+    mask: 255.255.255.0
+
+    serviceType: LoadBalancer
+    serviceAnnotations:
+      service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
+
+    startupScript: |
+      #!/bin/bash
+
+      # Block access to EC2 metadata API
+      iptables -A OUTPUT -d 169.254.169.254 -j DROP
+
+      # Pre-create status.log for non-root ownership
+      mkdir -p /var/tmp/openvpn
+      touch /var/tmp/openvpn/openvpn-status.log
+      chown -R nobody:nogroup /var/tmp/openvpn
+
+    # pki/ca.crt from vpn-ca
+    caBundle: |
+      -----BEGIN CERTIFICATE-----
+      MIIDYDCCAkigAwIBAgIUA5UVWjTPM/Wh/DEG+K8zmlGElBQwDQYJKoZIhvcNAQEL
+      BQAwHTEbMBkGA1UEAwwSQmxpbmsgTGFicyBSb290IENBMB4XDTI1MDYwNTIzMzEz
+      NFoXDTM1MDYwMzIzMzEzNFowHTEbMBkGA1UEAwwSQmxpbmsgTGFicyBSb290IENB
+      MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqN5XoYmI+5x+gyMfYEE2
+      b5NBPU5U3RWhcXws00njE42B6J+a4Gt3R1bguhgYfIB//9p52tOBE+2tFSeR7par
+      i0GOoP+zNY/YGJzpDk3iJyjSV+4fRBNopwN8xR5ZmFjRCBuGpcfj3X1vAoMAtGN3
+      JLe2pf4V70VByQ/y8Str/ffo8lju866f+Ct4XqcMuDSFBeOhCRhdJ3go0P9nXl0e
+      AV6iMA4UPNdUL4DqRudrVjATpWTPwuUhuh0tzcu/5gN4qOfxEF/N1M6/fSJtsgbV
+      sU4KcQkEaXjzLei/j2FUKkZ5vPfxqZ2ReSnfqoVwUBAkhlXHIUwysHY+RpFMjGFm
+      tQIDAQABo4GXMIGUMAwGA1UdEwQFMAMBAf8wHQYDVR0OBBYEFGZeUdKo9++/tNvk
+      2xr2lDjwUbAFMFgGA1UdIwRRME+AFGZeUdKo9++/tNvk2xr2lDjwUbAFoSGkHzAd
+      MRswGQYDVQQDDBJCbGluayBMYWJzIFJvb3QgQ0GCFAOVFVo0zzP1ofwxBvivM5pR
+      hJQUMAsGA1UdDwQEAwIBBjANBgkqhkiG9w0BAQsFAAOCAQEAbIXn2HQc5qHS0S+v
+      iFpU3Fil6jE/lNuZY/bue8z6olWCdgPbx8wC/TwnKZr6eCg3yJ0q23U5s8CIn716
+      /0nl4r92UuDBP038VFqE/RxqyOa2zTJ/RYWMl3aQWowoqIw8RJ7TgGdtgm5axvER
+      BDe9+aXqbhlNo++r53nnABYSZtkqqZI0imRL8JvZIBiYTpko0/x01IvtMq+2b8sU
+      N0GvHHdwD80nGez98nfTlAXoQi4ftNwgxf22hzUOp4hc8gltLQVnbsCyVfPvOJFz
+      v4tfobFepaydntfv8DT+1IEMtCB+6sl4bTDPDUM1hLM5Tt9pvLSn/L8qXbVel1VB
+      ZTJEqg==
+      -----END CERTIFICATE-----
+

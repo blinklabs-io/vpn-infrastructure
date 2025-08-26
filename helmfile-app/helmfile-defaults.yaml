@@ -21,7 +21,9 @@ environments:
       - vars/defaults-vpn.yaml.gotmpl
       # This is the per-environment values file
       - vars/{{ .Environment.Name }}.yaml
+      - vars/{{ .Environment.Name }}.secrets.yaml
       - vars/{{ .Environment.Name }}.yaml.gotmpl
+      - vars/{{ .Environment.Name }}.secrets.yaml.gotmpl
     missingFileHandler: Debug
   aws-vpn:
     values:
@@ -31,5 +33,7 @@ environments:
       - vars/defaults-vpn.yaml.gotmpl
       # This is the per-environment values file
       - vars/{{ .Environment.Name }}.yaml
+      - vars/{{ .Environment.Name }}.secrets.yaml
       - vars/{{ .Environment.Name }}.yaml.gotmpl
+      - vars/{{ .Environment.Name }}.secrets.yaml.gotmpl
     missingFileHandler: Debug
