@@ -1,6 +1,6 @@
 ---
 bases:
-  - helmfile-defaults.yaml
+  - helmfile-defaults.yaml.gotmpl
   - helmfile-repos.yaml
 
 ---
@@ -63,7 +63,7 @@ releases:
       app: vpn-{{ $key }}
     condition: vpn.enabled
     values:
-      - vpn/values.indexer.yaml
+      - vpn/values.indexer.yaml.gotmpl
       - {{- tpl (readFile "vpn/templates/vpn-indexer.yaml.gotmpl") (merge $values $.Values.vpn.defaults (dict "key" $key)) | nindent 8 }}
 
   - name: vpn-{{ $key }}

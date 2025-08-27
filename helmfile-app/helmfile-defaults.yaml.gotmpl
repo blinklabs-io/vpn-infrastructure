@@ -1,3 +1,4 @@
+---
 helmDefaults:
   wait: false
   createNamespace: true
@@ -6,6 +7,7 @@ helmDefaults:
   # here to be clear about our intentions
   atomic: false
 
+---
 # Load default and per-env vars files
 environments:
   default:
@@ -14,6 +16,8 @@ environments:
       - vars/defaults.yaml.gotmpl
     missingFileHandler: Debug
   local-vpn:
+    secrets:
+      - vars/secrets.yaml
     values:
       - vars/defaults.yaml
       - vars/defaults.yaml.gotmpl
@@ -21,11 +25,11 @@ environments:
       - vars/defaults-vpn.yaml.gotmpl
       # This is the per-environment values file
       - vars/{{ .Environment.Name }}.yaml
-      - vars/{{ .Environment.Name }}.secrets.yaml
       - vars/{{ .Environment.Name }}.yaml.gotmpl
-      - vars/{{ .Environment.Name }}.secrets.yaml.gotmpl
     missingFileHandler: Debug
   aws-vpn:
+    secrets:
+      - vars/secrets.yaml
     values:
       - vars/defaults.yaml
       - vars/defaults.yaml.gotmpl
@@ -33,7 +37,5 @@ environments:
       - vars/defaults-vpn.yaml.gotmpl
       # This is the per-environment values file
       - vars/{{ .Environment.Name }}.yaml
-      - vars/{{ .Environment.Name }}.secrets.yaml
       - vars/{{ .Environment.Name }}.yaml.gotmpl
-      - vars/{{ .Environment.Name }}.secrets.yaml.gotmpl
     missingFileHandler: Debug
