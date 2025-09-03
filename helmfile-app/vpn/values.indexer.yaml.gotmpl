@@ -11,6 +11,9 @@ tx:
   kupoUrl: {{ .Values.tx.kupoUrl }}
   ogmiosUrl: {{ .Values.tx.ogmiosUrl }}
   submitUrl: {{ .Values.tx.submitUrl }}
+vpn:
+  domain: {{ .Values.vpn.domain }}
+  region: {{ .Values.vpn.region }}
 crl:
   configMapName: vpn-ca-crl
   configMapKey: crl.pem
