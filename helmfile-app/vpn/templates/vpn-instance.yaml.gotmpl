@@ -33,6 +33,10 @@ configFiles:
       # This path matches the default from the helm chart
       status /var/tmp/openvpn/openvpn-status.log
       status-version 2
+      # ns1 and ns2
+      push "dhcp-option DNS 34.67.9.70"
+      push "dhcp-option DNS 34.135.129.215"
+      push "register-dns"
       push "redirect-gateway def1"
       user nobody
       group nogroup
