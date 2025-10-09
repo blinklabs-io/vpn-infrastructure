@@ -1,7 +1,9 @@
 s3:
   clientKeyPrefix: {{ .key }}/
 ca:
-  cert: {{ toYaml .caCert | nindent 4 }}
+  cert: |-
+    {{- .caCert | nindent 4 }}
+    {{- .caBundle | nindent 4 }}
   key: {{ toYaml .caKey | nindent 4 }}
 crl:
   configMapNamespace: vpn-{{ .key }}
