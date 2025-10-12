@@ -28,7 +28,7 @@ configFiles:
       ca ca.crt
       cert server.crt
       key server.key
-      crl-verify crl.pem
+      crl-verify crl/crl.pem
       topology subnet
       # This path matches the default from the helm chart
       status /var/tmp/openvpn/openvpn-status.log
@@ -56,6 +56,7 @@ configFiles:
   - name: dh.pem
     content: {{ toYaml .dhParams | indent 6 }}
 
-  - name: crl.pem
+  # NOTE: we mount this in its own dir because the kubelet won't automatically update it
+  # if we specify the key (which uses 'subPath')
+  - name: crl
     configMapName: vpn-ca-crl
-    configMapKey: crl.pem
