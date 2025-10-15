@@ -12,6 +12,8 @@ aws:
     certificates:
     - name: api.b7s.services
       route53_domain: b7s.services
+    - name: preprod-api.b7s.services
+      route53_domain: b7s.services
   iam:
     users:
       - name: client-profile-bucket-user
