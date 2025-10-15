@@ -24,7 +24,7 @@ service:
   annotations:
     service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
     # This cert is created by Terraform
-    service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws:acm:us-east-1:705913449309:certificate/c8ff6bb0-f1cf-42fc-be78-33e03577cc79
+    service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws:acm:us-east-1:705913449309:certificate/c8ff6bb0-f1cf-42fc-be78-33e03577cc79,arn:aws:acm:us-east-1:705913449309:certificate/3a937532-f30f-43a6-bcba-a26c0f48c080
     # TODO: uncomment this when we have external-dns
     # NOTE: this record is manually created for now
     #external-dns.alpha.kubernetes.io/hostname: api.b7s.services
