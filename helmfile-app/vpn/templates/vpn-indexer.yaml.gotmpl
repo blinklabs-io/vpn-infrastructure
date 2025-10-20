@@ -5,5 +5,23 @@ ca:
     {{- .caCert | nindent 4 }}
     {{- .caBundle | nindent 4 }}
   key: {{ toYaml .caKey | nindent 4 }}
+  {{- if hasKey . "caPassphrase" }}
+  passphrase: {{ toYaml .caPassphrase | nindent 4 }}
+  {{- end }}
 crl:
   configMapNamespace: vpn-{{ .key }}
+tx:
+  kupoUrl: {{ .kupoUrl }}
+  ogmiosUrl: {{ .ogmiosUrl }}
+  submitUrl: {{ .submitUrl }}
+vpn:
+  domain: {{ .domain }}
+  region: {{ .region }}
+{{- if hasKey . "extraEnv" }}
+extraEnv: {{ toYaml .extraEnv | nindent 2 }}
+{{- end }}
+{{- if hasKey . "apiAcmCert" }}
+service:
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-ssl-cert: {{ .apiAcmCert }}
+{{- end }}
