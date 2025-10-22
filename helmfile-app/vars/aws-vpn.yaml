@@ -4,5 +4,16 @@ kube-state-metrics:
   enabled: true
 vpn:
   instances:
-    # The defaults should work for us
     us1:
+      # We have nothing to override from the defaults here
+    mainnet-us1:
+      extraEnv:
+        INDEXER_NETWORK: mainnet
+        # This intersect slot/hash is the block before the script and ref token below appeared on-chain
+        INDEXER_INTERSECT_HASH: baeb3d24974cbc266cb80df9a93d17be3b1ad7956a586ce19bf0a6f56304f909
+        INDEXER_INTERSECT_SLOT: '168794352'
+        INDEXER_SCRIPT_ADDRESS: addr1zxfxx3qgt07juchnuax4p0hl9eyzwns3j0khr9nz67pakz7gx8yp9m2ssx9v9vv60a3xudznxtw68vr8l0rpw26u2gfq8cpcxm
+        INDEXER_DELAY_CONFIRMATIONS: '3'
+        INDEXER_REFERENCE_TOKEN: 1497d1a199633ac5908aa872c9771f9f736f0dc08337b071df2508b7.70726f7669646572
+        TXBUILDER_PROVIDER_ADDRESS: addr1qygqp4gamrz0j2cfg05y3y3s4uev8gthh6d3t4k9p0xr8jxgx8yp9m2ssx9v9vv60a3xudznxtw68vr8l0rpw26u2gfqtn46y0
+        TXBUILDER_SCRIPT_REF_INPUT: df1b318e4c45a162ef6b4ba00774018b54d4c873d5414b6d35b4858ec866512a#1
