@@ -23,23 +23,30 @@ configFiles:
       port {{ .port }}
       proto {{ .proto }}
       dev tun
+      persist-key
+      persist-tun
       server {{ .network }} {{ .mask }}
       dh dh.pem
       ca ca.crt
       cert server.crt
       key server.key
       crl-verify crl/crl.pem
+      tls-server
+      remote-cert-tls client
+      tls-version-min 1.2
+      tls-cipher TLS-ECDHE-RSA-WITH-AES-256-GCM-SHA384
+      auth SHA256
       topology subnet
       # This path matches the default from the helm chart
       status /var/tmp/openvpn/openvpn-status.log
       status-version 2
-      # ns1 and ns2
-      push "dhcp-option DNS 34.67.9.70"
-      push "dhcp-option DNS 34.135.129.215"
+      push "dhcp-option DNS 10.8.0.1"
       push "register-dns"
+      push "block-outside-dns"
       push "redirect-gateway def1"
       user nobody
       group nogroup
+      keepalive 10 120
 
   - name: ca.crt
     content: |-

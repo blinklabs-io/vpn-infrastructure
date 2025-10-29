@@ -8,5 +8,18 @@ metrics:
   service:
     enabled: true
 
+bind:
+  enabled: true
+  resources:
+    requests:
+      memory: 256M
+      cpu: 250m
+    limits:
+      memory: 256M
+      cpu: 500m
+  env:
+    # This is the "magic" IP that refers to the current VPC's resolver in EC2
+    dns_forwarder: 169.254.169.253
+
 image:
   tag: '0.4.0'
