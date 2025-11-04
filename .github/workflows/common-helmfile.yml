@@ -1,0 +1,79 @@
+on:
+  workflow_call:
+    inputs:
+      cluster:
+        required: true
+        type: string
+      arguments:
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  run-helmfile:
+    name: run-helmfile
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2 https://github.com/actions/checkout/releases/tag/v4.2.2
+
+      - name: Install kubectl
+        uses: azure/setup-kubectl@0c5e050edfed71b2b50731ab044d42489d51c129 # vv4.0.0 https://github.com/Azure/setup-kubectl/releases/tag/vv4.0.0
+        with:
+          version: "v1.32.3"
+
+      - name: Sops Binary Installer
+        uses: mdgreenwald/mozilla-sops-action@d9714e521cbaecdae64a89d2fdd576dd2aa97056 # v1.6.0 https://github.com/mdgreenwald/mozilla-sops-action/releases/tag/v1.6.0
+
+      - name: Setup AWS Profile
+        if: inputs.cluster == 'aws-vpn'
+        run: |
+          mkdir -p ~/.aws
+          cat > ~/.aws/credentials << EOF
+          [vpn_aws]
+          aws_access_key_id = ${{ secrets.VPN_OPS_AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key = ${{ secrets.VPN_OPS_AWS_SECRET_ACCESS_KEY }}
+          EOF
+
+          cat > ~/.aws/config << EOF
+          [profile vpn_aws]
+          region = us-east-1
+          EOF
+
+          echo "AWS_PROFILE=vpn_aws" >> $GITHUB_ENV
+
+      - name: Install AWS CLI
+        if: inputs.cluster == 'aws-vpn'
+        run: |
+          set -e
+          # Bail if AWS CLI is already in PATH
+          export PATH=$HOME/bin:$PATH
+          if which aws >/dev/null; then
+            if test -f $HOME/bin/aws; then
+              echo $HOME/bin >> $GITHUB_PATH
+            fi
+            exit 0
+          fi
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-$(uname -m).zip" -o "awscliv2.zip"
+          unzip awscliv2.zip
+          cd aws && ./install -i $HOME/aws-cli -b $HOME/bin --update
+          rm -rf aws awscliv2.zip
+          echo $HOME/bin >> $GITHUB_PATH
+
+      - name: Configure EKS access
+        if: inputs.cluster == 'aws-vpn'
+        run: aws --region us-east-1 eks update-kubeconfig --name vpn-us-east-1
+
+      - name: Run Helmfile
+        uses: helmfile/helmfile-action@712000e3d4e28c72778ecc53857746082f555ef3 # v2.0.4 https://github.com/helmfile/helmfile-action/releases/tag/v2.0.4
+        with:
+          helmfile-version: "v1.1.5"
+          helm-version: "v3.19.0"
+          helm-plugins: >
+            https://github.com/databus23/helm-diff,
+            https://github.com/jkroepke/helm-secrets
+          helmfile-workdirectory: helmfile-app
+          helmfile-args: "-e ${{ inputs.cluster }} ${{ inputs.arguments }}"
+          helmfile-auto-init: "false"

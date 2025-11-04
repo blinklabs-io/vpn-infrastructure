@@ -1,0 +1,23 @@
+name: test-helmfile
+
+on:
+  workflow_dispatch:
+    inputs:
+      cluster:
+        description: "Which cluster to run against"
+        required: true
+        type: choice
+        default: aws-vpn
+        options:
+          - aws-vpn
+
+permissions:
+  contents: read
+
+jobs:
+  helmfile:
+    secrets: inherit
+    uses: ./.github/workflows/common-helmfile.yml
+    with:
+      cluster: ${{ inputs.cluster }}
+      arguments: "diff"
