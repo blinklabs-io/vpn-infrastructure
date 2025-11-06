@@ -26,7 +26,6 @@ alloy:
       prometheus.scrape "alloy_check" {
         targets    = discovery.relabel.alloy_check.output
         forward_to = [prometheus.relabel.alloy_check.receiver]
-
         scrape_interval = "60s"
       }
 
@@ -45,8 +44,8 @@ alloy:
           url = "https://prometheus-prod-13-prod-us-east-0.grafana.net/api/prom/push"
 
           basic_auth {
-            username = "1834751"
-            password = "{{ .Values.grafana.password }}"
+            username = env("GRAFANA_USERNAME")
+            password = env("GRAFANA_PASSWORD")
           }
         }
       }
@@ -118,26 +117,26 @@ alloy:
             "instance" = constants.hostname,
           },
         ]
-      
+
         rule {
           target_label = "job"
           replacement = "integrations/kubernetes/kube-state-metrics"
         }
-      
+
         rule {
           target_label = "cluster"
           replacement = "{{ .Values.eks_lb.clusterName }}"
         }
       }
-      
+
       prometheus.scrape "kube_state_metrics" {
         targets    = discovery.relabel.kube_state_metrics.output
         forward_to = [prometheus.relabel.kube_state_metrics.receiver]
-        
+
         scrape_interval = "60s"
         metrics_path = "/metrics"
       }
-      
+
       prometheus.relabel "kube_state_metrics" {
         forward_to = [prometheus.remote_write.metrics_service.receiver]
 
@@ -153,3 +152,24 @@ alloy:
         level = "info"
         format = "logfmt"
       }
+  extraEnv:
+    - name: GRAFANA_USERNAME
+      valueFrom:
+        secretKeyRef:
+          name: grafana-cloud
+          key: GRAFANA_USERNAME
+    - name: GRAFANA_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: grafana-cloud
+          key: GRAFANA_PASSWORD
+
+extraObjects:
+- apiVersion: v1
+  kind: Secret
+  metadata:
+    name: grafana-cloud
+  type: Opaque
+  stringData:
+    GRAFANA_USERNAME: "1834751"
+    GRAFANA_PASSWORD: "{{ .Values.grafana.password }}"

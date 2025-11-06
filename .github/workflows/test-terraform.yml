@@ -3,8 +3,9 @@ name: test-terraform
 on:
   workflow_dispatch:
   pull_request:
-    branches: ['main']
-    paths: ['config.yaml','terraform/**','.github/workflows/test-terraform.yml']
+    branches: ["main"]
+    paths:
+      ["config.yaml", "terraform/**", ".github/workflows/test-terraform.yml"]
 
 defaults:
   run:

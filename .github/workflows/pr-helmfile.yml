@@ -1,0 +1,21 @@
+name: pr-helmfile
+on:
+  pull_request:
+    paths:
+      - "helmfile-app/**"
+      - ".github/workflows/pr-helmfile.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  pr-helmfile:
+    strategy:
+      matrix:
+        cluster:
+          - aws-vpn
+    secrets: inherit
+    uses: ./.github/workflows/common-helmfile.yml
+    with:
+      cluster: ${{ matrix.cluster }}
+      arguments: "diff"
