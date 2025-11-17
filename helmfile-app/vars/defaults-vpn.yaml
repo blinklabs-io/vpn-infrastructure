@@ -26,6 +26,8 @@ vpn:
     network: 10.8.0.0
     mask: 255.255.255.0
 
+    indexerVersion: 0.8.1
+
     serviceType: LoadBalancer
     serviceAnnotations:
       service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing

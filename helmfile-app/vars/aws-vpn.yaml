@@ -7,6 +7,8 @@ vpn:
     us1:
       # We have nothing to override from the defaults here
     mainnet-us1:
+      # We switched to a new contract in 0.8.1, and we want to keep this instance working on the old contract
+      indexerVersion: '0.8.0'
       extraEnv:
         INDEXER_NETWORK: mainnet
         # This intersect slot/hash is the block before the script and ref token below appeared on-chain
@@ -17,3 +19,14 @@ vpn:
         INDEXER_REFERENCE_TOKEN: 1497d1a199633ac5908aa872c9771f9f736f0dc08337b071df2508b7.70726f7669646572
         TXBUILDER_PROVIDER_ADDRESS: addr1qygqp4gamrz0j2cfg05y3y3s4uev8gthh6d3t4k9p0xr8jxgx8yp9m2ssx9v9vv60a3xudznxtw68vr8l0rpw26u2gfqtn46y0
         TXBUILDER_SCRIPT_REF_INPUT: df1b318e4c45a162ef6b4ba00774018b54d4c873d5414b6d35b4858ec866512a#1
+    mainnet-us1-2:
+      extraEnv:
+        INDEXER_NETWORK: mainnet
+        # This intersect slot/hash is the block before the script and ref token below appeared on-chain
+        INDEXER_INTERSECT_HASH: 0e8ee44ed5d0a999a61d820977e30c177d375dcfcf9a389e6fdca7aa7d7d04e8
+        INDEXER_INTERSECT_SLOT: '171330852'
+        INDEXER_SCRIPT_ADDRESS: addr1zxds5zvwh3qws8hxfyuqvpu66qfeyghy9dsxwccmhkz3vqkgx8yp9m2ssx9v9vv60a3xudznxtw68vr8l0rpw26u2gfqhx5tkz
+        INDEXER_DELAY_CONFIRMATIONS: '3'
+        INDEXER_REFERENCE_TOKEN: 949dfe5cf4691b821a09e4017f1894a5dfbf12c02271cbcaa6136c8d.70726f7669646572
+        TXBUILDER_PROVIDER_ADDRESS: addr1qygqp4gamrz0j2cfg05y3y3s4uev8gthh6d3t4k9p0xr8jxgx8yp9m2ssx9v9vv60a3xudznxtw68vr8l0rpw26u2gfqtn46y0
+        TXBUILDER_SCRIPT_REF_INPUT: ef40fa428ae3485fa089896f577139f3212bff7f7908329d677d387c240103f2#1
