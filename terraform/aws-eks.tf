@@ -10,4 +10,8 @@ module "eks" {
   private_subnets = try(each.value.private_subnets, [])
   tags            = try(each.value.tags, null)
   node_groups     = try(each.value.node_groups, null)
+  encryption_config = {
+    provider_key_arn = "arn:aws:kms:us-east-1:705913449309:alias/vpn-eks-encryption"
+    resources        = ["secrets"]
+  }
 }

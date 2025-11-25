@@ -1,6 +1,9 @@
 aws:
   clusters:
   - name: vpn-us-east-1
+    encryption_config:
+      - provider_key_arn: "arn:aws:kms:us-east-1:705913449309:alias/vpn-eks-encryption"
+        resources: ["secrets"]
     node_groups:
     - name: vpn-1a
       desired_size: 1
@@ -43,6 +46,12 @@ aws:
           - arn:aws:iam::705913449309:user/ops
         aliases:
           - sops
+      - name: eks-encryption
+        description: CMK used to encrypt EKS secrets
+        admins:
+          - arn:aws:iam::705913449309:user/ops
+        aliases:
+          - alias/vpn-eks-encryption
   s3:
     buckets:
       - name: b7s-services-client-profiles
