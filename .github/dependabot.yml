@@ -13,3 +13,7 @@ updates:
     directory: "/terraform"
     schedule:
       interval: "weekly"
+  - package-ecosystem: "helm"
+    directory: "/helmfile-app"
+    schedule:
+      interval: "weekly"

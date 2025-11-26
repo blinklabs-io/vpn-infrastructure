@@ -10,6 +10,7 @@ on:
 
 permissions:
   contents: read
+  security-events: write
 
 jobs:
   run-helmfile:
@@ -20,9 +21,23 @@ jobs:
         uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1 https://github.com/actions/checkout/releases/tag/v5.0.1
 
       - name: Install kubectl
-        uses: azure/setup-kubectl@0c5e050edfed71b2b50731ab044d42489d51c129 # vv4.0.0 https://github.com/Azure/setup-kubectl/releases/tag/vv4.0.0
+        uses: azure/setup-kubectl@0c5e050edfed71b2b50731ab044d42489d51c129 # v4.0.0 https://github.com/Azure/setup-kubectl/releases/tag/vv4.0.0
         with:
           version: "v1.32.3"
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@b6643a29fecd7f34b3597bc6acb0a98b03d33ff8
+        with:
+          scan-type: 'fs'
+          scan-ref: 'helmfile-app'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@b8d3b6e
+        if: always()
+        with:
+          sarif_file: 'trivy-results.sarif'
 
       - name: Sops Binary Installer
         uses: mdgreenwald/mozilla-sops-action@d9714e521cbaecdae64a89d2fdd576dd2aa97056 # v1.6.0 https://github.com/mdgreenwald/mozilla-sops-action/releases/tag/v1.6.0
