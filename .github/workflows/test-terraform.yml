@@ -1,4 +1,6 @@
 name: test-terraform
+permissions:
+  contents: read
 
 on:
   workflow_dispatch:
