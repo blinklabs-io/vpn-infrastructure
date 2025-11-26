@@ -23,3 +23,9 @@ bind:
 
 image:
   tag: '0.4.0'
+
+networkPolicy:
+  enabled: true
+  # Allow ingress on UDP 1194 for VPN connections
+  # Allow egress to external destinations, but restrict internal cluster access
+  # (Chart defaults should handle allowing external egress while denying internal)
