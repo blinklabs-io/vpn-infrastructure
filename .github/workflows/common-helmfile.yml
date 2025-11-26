@@ -10,7 +10,6 @@ on:
 
 permissions:
   contents: read
-  security-events: write
 
 jobs:
   run-helmfile:
@@ -32,12 +31,6 @@ jobs:
           scan-ref: 'helmfile-app'
           format: 'sarif'
           output: 'trivy-results.sarif'
-
-      - name: Upload Trivy scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@b8d3b6e
-        if: always()
-        with:
-          sarif_file: 'trivy-results.sarif'
 
       - name: Sops Binary Installer
         uses: mdgreenwald/mozilla-sops-action@d9714e521cbaecdae64a89d2fdd576dd2aa97056 # v1.6.0 https://github.com/mdgreenwald/mozilla-sops-action/releases/tag/v1.6.0
