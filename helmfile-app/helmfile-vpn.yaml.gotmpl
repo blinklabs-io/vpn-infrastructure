@@ -69,7 +69,7 @@ releases:
   - name: vpn-{{ $key }}
     namespace: vpn-{{ $key }}
     chart: oci://ghcr.io/blinklabs-io/helm-charts/charts/openvpn
-    version: 0.8.1
+    version: 0.9.0
     labels:
       app: vpn-{{ $key }}
     condition: vpn.enabled
