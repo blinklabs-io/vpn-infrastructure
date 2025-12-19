@@ -4,8 +4,9 @@ kube-state-metrics:
   enabled: true
 vpn:
   instances:
-    us1:
-      # We have nothing to override from the defaults here
+    preprod-us1:
+      # TODO: remove this once we update the version in defaults
+      indexerVersion: '0.9.1'
     mainnet-us1:
       # We switched to a new contract in 0.8.1, and we want to keep this instance working on the old contract
       indexerVersion: '0.8.0'
