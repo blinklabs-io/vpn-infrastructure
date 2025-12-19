@@ -55,6 +55,7 @@ releases:
       - storageclasses: {{ toYaml .Values.storageclasses | nindent 10 }}
 
   {{- range $key, $values := .Values.vpn.instances }}
+  {{-   $mergedValues := (mustMerge $values $.Values.vpn.defaults (dict "key" $key)) }}
   - name: vpn-indexer
     namespace: vpn-{{ $key }}
     chart: oci://ghcr.io/blinklabs-io/helm-charts/charts/vpn-indexer
@@ -64,7 +65,7 @@ releases:
     condition: vpn.enabled
     values:
       - vpn/values.indexer.yaml.gotmpl
-      - {{- tpl (readFile "vpn/templates/vpn-indexer.yaml.gotmpl") (merge $values $.Values.vpn.defaults (dict "key" $key)) | nindent 8 }}
+      - {{- tpl (readFile "vpn/templates/vpn-indexer.yaml.gotmpl") $mergedValues | nindent 8 }}
 
   - name: vpn-{{ $key }}
     namespace: vpn-{{ $key }}
@@ -75,5 +76,5 @@ releases:
     condition: vpn.enabled
     values:
       - vpn/values.instance.yaml
-      - {{- tpl (readFile "vpn/templates/vpn-instance.yaml.gotmpl") (merge $values $.Values.vpn.defaults (dict "key" $key)) | nindent 8 }}
+      - {{- tpl (readFile "vpn/templates/vpn-instance.yaml.gotmpl") $mergedValues | nindent 8 }}
   {{- end }}
