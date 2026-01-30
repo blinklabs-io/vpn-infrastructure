@@ -1,0 +1,45 @@
+---
+# Base values for WireGuard deployments
+# Instance-specific values are merged from wg-instance.yaml.gotmpl
+
+image:
+  repository: ghcr.io/blinklabs-io/docker-wireguard
+  pullPolicy: IfNotPresent
+
+# API server configuration
+api:
+  port: 8080
+
+# WireGuard configuration
+wireguard:
+  port: 51820
+  # Server subnet (CIDR)
+  subnet: "10.9.0.0/24"
+  dns: "1.1.1.1"
+  enableNat: true
+
+# Service configuration for WireGuard UDP traffic (port 51820)
+service:
+  type: LoadBalancer
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
+    service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+
+# Resources
+resources:
+  requests:
+    memory: "64Mi"
+    cpu: "100m"
+  limits:
+    memory: "256Mi"
+    cpu: "500m"
+
+# Security context for NET_ADMIN capability
+securityContext:
+  capabilities:
+    add:
+      - NET_ADMIN
+
+# Network policy
+networkPolicy:
+  enabled: true

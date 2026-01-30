@@ -67,3 +67,25 @@ vpn:
       ZTJEqg==
       -----END CERTIFICATE-----
 
+# WireGuard defaults
+wireguard:
+  enabled: false
+  instances: {}
+  defaults:
+    # WireGuard listen port (UDP)
+    port: 51820
+    # Server interface address within the VPN subnet (e.g., 10.9.0.1/24 means server gets .1)
+    interfaceAddress: "10.9.0.1/24"
+    # DNS server pushed to clients
+    dns: "1.1.1.1"
+    # Default chart version
+    chartVersion: "0.1.0"
+    # Default indexer version (requires WireGuard support, 0.10.0+)
+    indexerVersion: "0.10.0"
+    # Max devices per subscription
+    maxDevices: 3
+    # Service configuration
+    serviceType: LoadBalancer
+    serviceAnnotations:
+      service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
+      service.beta.kubernetes.io/aws-load-balancer-type: "nlb"

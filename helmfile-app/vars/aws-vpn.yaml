@@ -31,3 +31,20 @@ vpn:
         INDEXER_REFERENCE_TOKEN: 949dfe5cf4691b821a09e4017f1894a5dfbf12c02271cbcaa6136c8d.70726f7669646572
         TXBUILDER_PROVIDER_ADDRESS: addr1qygqp4gamrz0j2cfg05y3y3s4uev8gthh6d3t4k9p0xr8jxgx8yp9m2ssx9v9vv60a3xudznxtw68vr8l0rpw26u2gfqtn46y0
         TXBUILDER_SCRIPT_REF_INPUT: ef40fa428ae3485fa089896f577139f3212bff7f7908329d677d387c240103f2#1
+# WireGuard instances
+wireguard:
+  enabled: true
+  instances:
+    preview-us2:
+      # Use latest indexer version with WireGuard support
+      indexerVersion: '0.10.0'
+      extraEnv:
+        INDEXER_NETWORK: preview
+        # This intersect slot/hash is the block before the script and ref token appeared on-chain
+        INDEXER_INTERSECT_HASH: 20cdaec575824dfd5c155e157296ec9ac4ed24eb3f6305a08c7cf6b7f65db825
+        INDEXER_INTERSECT_SLOT: '101294699'
+        INDEXER_SCRIPT_ADDRESS: addr_test1zz50fqklfgvkxey0c0ey3043f7y3dfd68s4mjs7x0kldts4tza0gsjhr8s8v5f6axuprv6utq3h7ctm7xm3zd9fscd6sn2xm2z
+        INDEXER_DELAY_CONFIRMATIONS: '3'
+        INDEXER_REFERENCE_TOKEN: 400d048d3548bde36426a6b7d8d576eb6689ec156d3e7203fe41e0b0.70726f7669646572
+        TXBUILDER_PROVIDER_ADDRESS: addr_test1qp5uud60nh2yl2gw3cu8wj3f23a5kwxnhym9tk45qjujusdtza0gsjhr8s8v5f6axuprv6utq3h7ctm7xm3zd9fscd6s4582zh
+        TXBUILDER_SCRIPT_REF_INPUT: a4ba98190a4dedd6dfc88121f15ff9284bfc44d7d83ed9e1e470fd9b836c80fe#1

@@ -1,0 +1,36 @@
+# WireGuard instance-specific configuration
+# Merged with base values.yaml.gotmpl
+
+{{- if .chartVersion }}
+image:
+  tag: '{{ .chartVersion }}'
+{{- end }}
+
+wireguard:
+  {{- if .port }}
+  port: {{ .port }}
+  {{- end }}
+  {{- if .interfaceAddress }}
+  subnet: "{{ .interfaceAddress }}"
+  {{- end }}
+  {{- if .dns }}
+  dns: "{{ .dns }}"
+  {{- end }}
+  # Server private key from secrets
+  privateKey: {{ .serverPrivateKey | quote }}
+  # Public endpoint for client configs
+  endpoint: {{ .endpoint | quote }}
+
+# JWT public key for validating indexer requests
+api:
+  jwtPublicKey: |
+    {{- .jwtPublicKey | nindent 4 }}
+
+service:
+  type: {{ .serviceType | default "LoadBalancer" }}
+  {{- if hasKey . "nodePort" }}
+  nodePort: {{ .nodePort }}
+  {{- end }}
+  {{- if hasKey . "serviceAnnotations" }}
+  annotations: {{ toYaml .serviceAnnotations | nindent 4 }}
+  {{- end }}
