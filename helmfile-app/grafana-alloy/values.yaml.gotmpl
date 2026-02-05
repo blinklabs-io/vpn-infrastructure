@@ -104,8 +104,27 @@ alloy:
             "application" = "openvpn",
             "instance" = constants.hostname,
           },
+          {
+            "__address__" = "wg-preview-us2.wg-preview-us2.svc:8080",
+            "application" = "wireguard",
+            "instance" = constants.hostname,
+          },
         ]
+        forward_to = [prometheus.relabel.custom_targets.receiver]
+        scrape_interval = "30s"
+        metrics_path = "/metrics"
+      }
+
+      prometheus.relabel "custom_targets" {
         forward_to = [prometheus.remote_write.metrics_service.receiver]
+
+        // Keep WireGuard and OpenVPN metrics
+        // WireGuard exporters may use either wg_ or wireguard_ prefix
+        rule {
+          source_labels = ["__name__"]
+          regex = "up|wg_.*|wireguard_.*|openvpn_.*"
+          action = "keep"
+        }
       }
 
       // Kube-state-metrics scraping configuration

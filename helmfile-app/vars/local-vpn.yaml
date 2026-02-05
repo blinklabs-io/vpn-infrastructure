@@ -7,3 +7,19 @@ vpn:
     local-test:
       serviceType: NodePort
       nodePort: 31194
+
+# WireGuard instances for local development
+# NOTE: Local WireGuard deployment requires these values in secrets.yaml:
+#   - serverPrivateKey: WireGuard server private key
+#   - serverPublicKey: WireGuard server public key
+#   - endpoint: Public endpoint (e.g., "localhost:31820" for local)
+#   - jwtPublicKey: Ed25519 public key for JWT verification
+#   - jwtPrivateKey: Ed25519 private key for JWT signing (in indexer config)
+wireguard:
+  enabled: true
+  instances:
+    local-test:
+      serviceType: NodePort
+      nodePort: 31820
+      # For local development, use placeholder endpoint
+      endpoint: "localhost:31820"

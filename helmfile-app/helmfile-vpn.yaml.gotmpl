@@ -62,6 +62,7 @@ releases:
     version: 0.5.5
     labels:
       app: vpn-{{ $key }}
+      protocol: openvpn
     condition: vpn.enabled
     values:
       - vpn/values.indexer.yaml.gotmpl
@@ -73,8 +74,38 @@ releases:
     version: 0.9.0
     labels:
       app: vpn-{{ $key }}
+      protocol: openvpn
     condition: vpn.enabled
     values:
       - vpn/values.instance.yaml
       - {{- tpl (readFile "vpn/templates/vpn-instance.yaml.gotmpl") $mergedValues | nindent 8 }}
+  {{- end }}
+
+  # WireGuard releases
+  {{- range $key, $values := .Values.wireguard.instances }}
+  {{-   $wgDefaults := $.Values.wireguard.defaults }}
+  {{-   $mergedValues := (mustMerge $values $wgDefaults (dict "key" $key)) }}
+  - name: wg-indexer-{{ $key }}
+    namespace: wg-{{ $key }}
+    chart: oci://ghcr.io/blinklabs-io/helm-charts/charts/vpn-indexer
+    version: 0.5.5
+    labels:
+      app: wg-{{ $key }}
+      protocol: wireguard
+    condition: wireguard.enabled
+    values:
+      - vpn/values.indexer.yaml.gotmpl
+      - {{- tpl (readFile "wireguard/templates/wg-indexer.yaml.gotmpl") $mergedValues | nindent 8 }}
+
+  - name: wg-{{ $key }}
+    namespace: wg-{{ $key }}
+    chart: oci://ghcr.io/blinklabs-io/helm-charts/charts/wireguard
+    version: {{ $mergedValues.chartVersion | default "0.1.0" }}
+    labels:
+      app: wg-{{ $key }}
+      protocol: wireguard
+    condition: wireguard.enabled
+    values:
+      - wireguard/values.yaml.gotmpl
+      - {{- tpl (readFile "wireguard/templates/wg-instance.yaml.gotmpl") $mergedValues | nindent 8 }}
   {{- end }}

@@ -1,0 +1,59 @@
+# vpn-indexer configuration for WireGuard mode
+# Extends base vpn-indexer values (which provides S3 credentials)
+
+image:
+  tag: '{{ .indexerVersion }}'
+
+# S3 key prefix for this instance (credentials come from base values.indexer.yaml.gotmpl)
+s3:
+  clientKeyPrefix: {{ .key }}/
+  peerPrefix: peers/
+
+# WireGuard-specific configuration
+wireguard:
+  enabled: true
+  endpoint: {{ .endpoint | quote }}
+  serverPubkey: {{ .serverPublicKey | quote }}
+  containerUrl: "http://wg-{{ .key }}:8080"
+  maxDevices: {{ .maxDevices | default 3 }}
+  jwtPrivateKey: |
+    {{- .jwtPrivateKey | nindent 4 }}
+
+# VPN region/domain
+vpn:
+  domain: {{ .domain }}
+  region: {{ .region }}
+  protocol: wireguard
+
+# Extra environment variables
+extraEnv:
+  AWS_REGION: {{ .region | quote }}
+  VPN_PROTOCOL: wireguard
+  VPN_WG_ENDPOINT: {{ .endpoint | quote }}
+  VPN_WG_SERVER_PUBKEY: {{ .serverPublicKey | quote }}
+  VPN_WG_CONTAINER_URL: "http://wg-{{ .key }}:8080"
+  VPN_WG_MAX_DEVICES: "{{ .maxDevices | default 3 }}"
+  VPN_REGION: {{ .region | quote }}
+{{- if hasKey . "extraEnv" }}
+{{ toYaml .extraEnv | indent 2 }}
+{{- end }}
+
+# Service configuration
+service:
+  type: LoadBalancer
+  port: 443
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
+{{- if hasKey . "apiAcmCert" }}
+    service.beta.kubernetes.io/aws-load-balancer-ssl-cert: {{ .apiAcmCert }}
+{{- end }}
+
+# Persistence for SQLite database
+persistence:
+  enabled: true
+  storageClassName: ebs-gp3
+
+# Run as root to work around permissions problems on EBS volumes
+# (same as OpenVPN indexer - see vpn/values.indexer.yaml.gotmpl)
+securityContext:
+  runAsUser: 0
