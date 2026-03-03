@@ -1,9 +1,9 @@
 # WireGuard instance-specific configuration
 # Merged with base values.yaml.gotmpl
 
-{{- if .chartVersion }}
+{{- if (or .chartVersion .imageTag) }}
 image:
-  tag: '{{ .chartVersion }}'
+  tag: '{{ .imageTag | default .chartVersion }}'
 {{- end }}
 
 wireguard:

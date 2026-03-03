@@ -23,7 +23,7 @@ wireguard:
   instances:
     preview-us2:
       # Use latest indexer version with WireGuard support
-      indexerVersion: '0.10.0'
+      indexerVersion: '0.10.1'
       extraEnv:
         INDEXER_NETWORK: preview
         # This intersect slot/hash is the block before the script and ref token appeared on-chain

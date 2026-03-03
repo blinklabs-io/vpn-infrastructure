@@ -59,7 +59,7 @@ releases:
   - name: vpn-indexer
     namespace: vpn-{{ $key }}
     chart: oci://ghcr.io/blinklabs-io/helm-charts/charts/vpn-indexer
-    version: 0.5.5
+    version: 0.6.0
     labels:
       app: vpn-{{ $key }}
       protocol: openvpn
@@ -88,7 +88,7 @@ releases:
   - name: wg-indexer-{{ $key }}
     namespace: wg-{{ $key }}
     chart: oci://ghcr.io/blinklabs-io/helm-charts/charts/vpn-indexer
-    version: 0.5.5
+    version: 0.6.0
     labels:
       app: wg-{{ $key }}
       protocol: wireguard
