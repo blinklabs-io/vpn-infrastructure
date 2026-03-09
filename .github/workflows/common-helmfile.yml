@@ -25,7 +25,7 @@ jobs:
           version: "v1.32.3"
 
       - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@97e0b3872f55f89b95b2f65b3dbab56962816478 # v0.34.2 https://github.com/aquasecurity/trivy-action/releases/tag/0.34.2
+        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1 # v0.35.0 https://github.com/aquasecurity/trivy-action/releases/tag/0.35.0
         with:
           scan-type: 'fs'
           scan-ref: 'helmfile-app'
