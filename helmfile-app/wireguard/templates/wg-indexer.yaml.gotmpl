@@ -13,7 +13,7 @@ s3:
 wireguard:
   enabled: true
   endpoint: {{ .endpoint | quote }}
-  serverPubkey: {{ .serverPublicKey | quote }}
+  serverPubKey: {{ .serverPublicKey | quote }}
   containerUrl: "http://wg-{{ .key }}:8080"
   maxDevices: {{ .maxDevices | default 3 }}
   jwtPrivateKey: |

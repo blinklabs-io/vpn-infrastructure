@@ -80,6 +80,9 @@ wireguard:
     dns: "1.1.1.1"
     # Default chart version
     chartVersion: "0.1.0"
+    # Default image tag
+    # Only needed if different than chartVersion above
+    imageTag: '0.1.1'
     # Default indexer version (requires WireGuard support, 0.10.0+)
     indexerVersion: "0.10.0"
     # Max devices per subscription
