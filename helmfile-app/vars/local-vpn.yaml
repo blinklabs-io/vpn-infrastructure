@@ -1,5 +1,7 @@
 eks_lb:
   enabled: false
+external_dns:
+  enabled: false
 grafana:
   enabled: false
 vpn:
