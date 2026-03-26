@@ -7,11 +7,9 @@ vpn:
     preprod-us1:
       serviceAnnotations:
         service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
-        external-dns.alpha.kubernetes.io/hostname: preprod-vpn.b7s.services
     mainnet-us1-2:
       serviceAnnotations:
         service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
-        external-dns.alpha.kubernetes.io/hostname: vpn.b7s.services
       extraEnv:
         INDEXER_NETWORK: mainnet
         # This intersect slot/hash is the block before the script and ref token below appeared on-chain
@@ -32,7 +30,6 @@ wireguard:
       serviceAnnotations:
         service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
         service.beta.kubernetes.io/aws-load-balancer-type: nlb
-        external-dns.alpha.kubernetes.io/hostname: preview-wg.b7s.services
       extraEnv:
         INDEXER_NETWORK: preview
         # This intersect slot/hash is the block before the script and ref token appeared on-chain
