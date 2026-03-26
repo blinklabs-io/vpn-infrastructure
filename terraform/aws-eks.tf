@@ -10,6 +10,4 @@ module "eks" {
   private_subnets = try(each.value.private_subnets, [])
   tags            = try(each.value.tags, null)
   node_groups     = try(each.value.node_groups, null)
-
-  enable_external_dns_irsa = try(each.value.enable_external_dns_irsa, false)
 }
