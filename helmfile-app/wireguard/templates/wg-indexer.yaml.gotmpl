@@ -25,6 +25,12 @@ vpn:
   region: {{ .region }}
   protocol: wireguard
 
+# TX building
+tx:
+  kupoUrl: {{ .kupoUrl }}
+  ogmiosUrl: {{ .ogmiosUrl }}
+  submitUrl: {{ .submitUrl }}
+
 # Extra environment variables
 extraEnv:
   AWS_REGION: {{ .region | quote }}
