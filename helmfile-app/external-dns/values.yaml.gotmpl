@@ -1,0 +1,11 @@
+provider: aws
+sources:
+  - service
+domainFilters:
+  - {{ .Values.external_dns.domainFilter }}
+txtOwnerId: {{ .Values.external_dns.txtOwnerId }}
+policy: upsert-only
+
+serviceAccount:
+  annotations:
+    eks.amazonaws.com/role-arn: {{ .Values.external_dns.serviceAccount.roleArn }}

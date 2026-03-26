@@ -14,9 +14,6 @@ service:
   port: 443
   annotations:
     service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
-    # TODO: uncomment this when we have external-dns
-    # NOTE: this record is manually created for now
-    #external-dns.alpha.kubernetes.io/hostname: api.b7s.services
 persistence:
   enabled: true
   storageClassName: ebs-gp3

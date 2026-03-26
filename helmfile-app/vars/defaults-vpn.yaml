@@ -1,6 +1,13 @@
 # This file contains the default values for the vpn cluster type
 cluster_type: "vpn"
 
+external_dns:
+  enabled: true
+  domainFilter: b7s.services
+  txtOwnerId: vpn-us-east-1
+  serviceAccount:
+    roleArn: "arn:aws:iam::705913449309:role/vpn-us-east-1-external-dns"
+
 eks_lb:
   enabled: true
   clusterName: vpn-us-east-1

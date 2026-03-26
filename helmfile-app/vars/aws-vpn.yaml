@@ -5,8 +5,11 @@ kube-state-metrics:
 vpn:
   instances:
     preprod-us1:
-      # NOTE: the defaults work for this instance
+      serviceAnnotations:
+        service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
     mainnet-us1-2:
+      serviceAnnotations:
+        service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
       extraEnv:
         INDEXER_NETWORK: mainnet
         # This intersect slot/hash is the block before the script and ref token below appeared on-chain
@@ -24,6 +27,9 @@ wireguard:
     preview-us2:
       # Use latest indexer version with WireGuard support
       indexerVersion: '0.10.1'
+      serviceAnnotations:
+        service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
+        service.beta.kubernetes.io/aws-load-balancer-type: nlb
       extraEnv:
         INDEXER_NETWORK: preview
         # This intersect slot/hash is the block before the script and ref token appeared on-chain

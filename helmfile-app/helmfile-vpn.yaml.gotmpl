@@ -5,6 +5,16 @@ bases:
 
 ---
 releases:
+  - name: external-dns
+    namespace: kube-system
+    chart: external-dns/external-dns
+    version: 1.16.1
+    labels:
+      app: external-dns
+    condition: external_dns.enabled
+    values:
+      - external-dns/values.yaml.gotmpl
+
   - name: eks
     namespace: kube-system
     chart: eks/aws-load-balancer-controller
