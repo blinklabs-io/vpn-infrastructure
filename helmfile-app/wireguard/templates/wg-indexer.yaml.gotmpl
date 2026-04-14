@@ -33,7 +33,7 @@ tx:
 
 # Extra environment variables
 extraEnv:
-  AWS_REGION: {{ .region | quote }}
+  AWS_REGION: us-east-1
   VPN_PROTOCOL: wireguard
   VPN_WG_ENDPOINT: {{ .endpoint | quote }}
   VPN_WG_SERVER_PUBKEY: {{ .serverPublicKey | quote }}
