@@ -14,7 +14,7 @@ wireguard:
   enabled: true
   endpoint: {{ .endpoint | quote }}
   serverPubKey: {{ .serverPublicKey | quote }}
-  containerUrl: "http://wg-{{ .key }}:8080"
+  containerUrl: "http://wg-{{ .key }}-wireguard-api.wg-{{ .key }}:8080"
   maxDevices: {{ .maxDevices | default 3 }}
   jwtPrivateKey: |
     {{- .jwtPrivateKey | nindent 4 }}
@@ -37,7 +37,7 @@ extraEnv:
   VPN_PROTOCOL: wireguard
   VPN_WG_ENDPOINT: {{ .endpoint | quote }}
   VPN_WG_SERVER_PUBKEY: {{ .serverPublicKey | quote }}
-  VPN_WG_CONTAINER_URL: "http://wg-{{ .key }}:8080"
+  VPN_WG_CONTAINER_URL: "http://wg-{{ .key }}-wireguard-api.wg-{{ .key }}:8080"
   VPN_WG_MAX_DEVICES: "{{ .maxDevices | default 3 }}"
   VPN_REGION: {{ .region | quote }}
 {{- if hasKey . "extraEnv" }}
