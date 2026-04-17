@@ -1,6 +1,7 @@
 aws:
   clusters:
   - name: vpn-us-east-1
+    enable_external_dns: true
     node_groups:
     - name: vpn-1a
       desired_size: 1
