@@ -2,6 +2,8 @@ aws:
   clusters:
   - name: vpn-us-east-1
     enable_external_dns: true
+    external_dns_hosted_zone_arns:
+      - "arn:aws:route53:::hostedzone/*"
     node_groups:
     - name: vpn-1a
       desired_size: 1
