@@ -26,7 +26,7 @@ wireguard:
   instances:
     preview-us2:
       # Use latest indexer version with WireGuard support
-      indexerVersion: '0.10.2'
+      indexerVersion: '0.10.3'
       serviceAnnotations:
         service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
         service.beta.kubernetes.io/aws-load-balancer-type: nlb
