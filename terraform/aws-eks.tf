@@ -1,5 +1,5 @@
 module "eks" {
-  source = "git::https://github.com/blinklabs-io/terraform-modules.git//aws_eks"
+  source = "git::https://github.com/blinklabs-io/terraform-modules.git?ref=aws_eks/v0.2.3"
 
   for_each        = { for c in try(local.env_vars.aws.clusters, {}) : c.name => c }
   cluster_name    = each.value.name
@@ -8,6 +8,8 @@ module "eks" {
   azs             = try(each.value.azs, ["us-east-1a", "us-east-1b", "us-east-1d"])
   public_subnets  = try(each.value.public_subnets, ["10.10.0.0/20", "10.10.16.0/20", "10.10.32.0/20"])
   private_subnets = try(each.value.private_subnets, [])
-  tags            = try(each.value.tags, null)
-  node_groups     = try(each.value.node_groups, null)
+  tags                          = try(each.value.tags, null)
+  node_groups                   = try(each.value.node_groups, null)
+  enable_external_dns           = try(each.value.enable_external_dns, false)
+  external_dns_hosted_zone_arns = try(each.value.external_dns_hosted_zone_arns, [])
 }
