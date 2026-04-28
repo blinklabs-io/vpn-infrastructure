@@ -1,5 +1,5 @@
 module "aws_kms" {
-  source = "git::https://github.com/blinklabs-io/terraform-modules.git//aws_kms"
+  source = "git::https://github.com/blinklabs-io/terraform-modules.git?ref=aws_kms/v0.1.0"
 
   for_each    = { for k in try(local.env_vars.aws.kms.keys, {}) : k.name => k }
   admins      = try(each.value.admins, [])
