@@ -1,6 +1,21 @@
 # vpn-indexer configuration for WireGuard mode
 # Extends base vpn-indexer values (which provides S3 credentials)
 
+{{/* Derive the indexer's WGSubnet (first 3 octets, e.g. "10.9.0") from the
+       server's interfaceAddress (e.g. "10.9.0.1/24") so the indexer allocates
+       peer IPs in the same /24 the WireGuard server is listening on. */}}
+{{- $wgIp := .interfaceAddress | splitList "/" | first }}
+{{- $wgOctets := $wgIp | splitList "." }}
+{{- if lt (len $wgOctets) 3 }}
+{{-   fail (printf "invalid interfaceAddress %q: expected IPv4 with at least 3 octets" .interfaceAddress) }}
+{{- end }}
+{{- range $i, $o := (slice $wgOctets 0 3) }}
+{{-   if not (regexMatch "^(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])$" $o) }}
+{{-     fail (printf "invalid interfaceAddress %q: octet %d (%q) is not in 0-255" $.interfaceAddress $i $o) }}
+{{-   end }}
+{{- end }}
+{{- $wgSubnet := list (index $wgOctets 0) (index $wgOctets 1) (index $wgOctets 2) | join "." }}
+
 image:
   tag: '{{ .indexerVersion }}'
 
@@ -24,6 +39,8 @@ vpn:
   domain: {{ .domain }}
   region: {{ .region }}
   protocol: wireguard
+  dns: {{ .dns | quote }}
+  wgSubnet: {{ $wgSubnet | quote }}
 
 # TX building
 tx:
@@ -39,6 +56,8 @@ extraEnv:
   VPN_WG_SERVER_PUBKEY: {{ .serverPublicKey | quote }}
   VPN_WG_CONTAINER_URL: "http://wg-{{ .key }}-wireguard-api.wg-{{ .key }}:8080"
   VPN_WG_MAX_DEVICES: "{{ .maxDevices | default 3 }}"
+  VPN_WG_SUBNET: {{ $wgSubnet | quote }}
+  VPN_DNS: {{ .dns | quote }}
   VPN_REGION: {{ .region | quote }}
 {{- if hasKey . "extraEnv" }}
 {{ toYaml .extraEnv | indent 2 }}
