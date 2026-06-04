@@ -12,7 +12,7 @@ eks_lb:
   enabled: true
   clusterName: vpn-us-east-1
   serviceAccount:
-    roleArn: "arn:aws:iam::705913449309:role/vpn-us-east-1-aws-lb-controller-20250821145900281600000003"
+    roleArn: "arn:aws:iam::705913449309:role/vpn-us-east-1-aws-lb-controller"
 
 storageclasses:
   ebs-gp3:
