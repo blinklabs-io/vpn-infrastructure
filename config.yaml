@@ -6,7 +6,7 @@ aws:
       - "arn:aws:route53:::hostedzone/*"
     node_groups:
     - name: vpn-1a
-      desired_size: 1
+      desired_size: 2
       metadata_options:
         # This is needed to allow EC2 metadata calls to work in a containerized environment.
         # This was previously the default of the upstream EKS module
