@@ -75,7 +75,7 @@ jobs:
         run: aws --region us-east-1 eks update-kubeconfig --name vpn-us-east-1
 
       - name: Run Helmfile
-        uses: helmfile/helmfile-action@f6f7844b9e6d9f5ac8cf4cdae8ada1a42755c036 # v2.4.4 https://github.com/helmfile/helmfile-action/releases/tag/v2.4.4
+        uses: helmfile/helmfile-action@daefb3e1fa5a91b7a88d30870d20da4896944818 # v2.4.5 https://github.com/helmfile/helmfile-action/releases/tag/v2.4.5
         with:
           helmfile-version: "v1.1.5"
           helm-version: "v3.19.0"
