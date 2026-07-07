@@ -48,6 +48,9 @@ tx:
   ogmiosUrl: {{ .ogmiosUrl }}
   submitUrl: {{ .submitUrl }}
 
+jwtPrivateKey: |
+  {{- .jwtPrivateKey | nindent 4 }}
+
 # Extra environment variables
 extraEnv:
   AWS_REGION: us-east-1
