@@ -33,7 +33,7 @@ jobs:
           output: 'trivy-results.sarif'
 
       - name: Sops Binary Installer
-        uses: mdgreenwald/mozilla-sops-action@d180aee439b894360c10dde0652df5d0fe0210dc # v2.1.2 https://github.com/mdgreenwald/mozilla-sops-action/releases/tag/v2.1.2
+        uses: mdgreenwald/mozilla-sops-action@36084c8eb2760327f525f18d162283efbca60b7d # v2.1.3 https://github.com/mdgreenwald/mozilla-sops-action/releases/tag/v2.1.3
 
       - name: Setup AWS Profile
         if: inputs.cluster == 'aws-vpn'
